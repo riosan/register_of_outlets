@@ -1,0 +1,86 @@
+
+/* Формируем блок аккордеона */
+.accordion {
+    /*margin-left: auto;*/
+    width: 10%;
+    /*margin: 0 auto;*/
+    border: 1px solid #d3d3d3;
+    border-radius: 10px;
+    overflow: hidden;
+                      }
+/* список аккордеона */
+.accordion>ul {
+    margin: 0;
+    padding: 0;
+    list-style:none;
+}
+.accordion>ul>li {
+    display:block;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    height:30px;
+    /* задержка перехода при раскрытии */
+    transition: height 0.5s ease-in-out;
+    -moz-transition: height 0.5s ease-in-out;
+    -webkit-transition: height 0.5s ease-in-out;
+    -o-transition: height 0.5s ease-in-out;
+}
+/* оформляем пункты */
+.accordion>ul>li>h3 {
+    display:block;
+    margin: 0 auto;
+    padding:7px 20px;
+    color: #068306;
+    text-decoration: none;
+    font-size:13pt;
+    text-shadow: 1px 1px #fff;
+    text-transform:uppercase;
+    background: #c9c9c9;
+    border-top: 1px solid #f4f4f4;
+    border-bottom: 1px solid #d3d3d3;
+    /* градиент */
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr = '#f0f0f0', endColorstr = '#c9c9c9')";
+    background-image: -moz-linear-gradient(top, #f0f0f0, #c9c9c9);
+    background-image: -ms-linear-gradient(top, #f0f0f0, #c9c9c9);
+    background-image: -o-linear-gradient(top, #f0f0f0, #c9c9c9);
+    background-image: -webkit-gradient(linear, center top, center bottom, from(#f0f0f0), to(#c9c9c9));
+    background-image: -webkit-linear-gradient(top, #f0f0f0, #c9c9c9);
+    background-image: linear-gradient(top, #f0f0f0, #c9c9c9);
+    /* анимируем заголовок */
+    -o-transition: padding-left 250ms ease-out;
+    -webkit-transition: padding-left 250ms ease-out;
+    -moz-transition: padding-left 250ms ease-out;
+}
+/* блок с содержанием */
+.accordion>ul>li>div {
+    background-color: hsla(110, 84%, 30%, 0.65);
+    margin: 0 auto;
+    padding:10px;
+    color: #555;
+    font-size: 13pt;
+    height: 100%;
+}
+.accordion>ul>li.active {
+    height: 200px;
+}
+/* пункты аккордеона при наведении */
+.accordion>ul>li.active>h3 {
+    /* оформляем пункты при наведении */
+    color: #068306;
+    background: #d3d3d3;
+    cursor:pointer;
+    /* градиент */
+    background-image: -moz-linear-gradient( top, #d3d3d3, #efefef);
+    background-image: -ms-linear-gradient( top, #d3d3d3, #efefef);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#d3d3d3), to(#efefef));
+    background-image: -o-linear-gradient(#dbdbdb, #e6e6e6); /* Opera */
+    filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr = '#d3d3d3', endColorstr='#efefef')"; /* IE 7 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr= '#d3d3d3', endColorstr= '#efefef')";   /* IE 8 */
+    /* подвижная ссылка */
+    padding-left: 30px;
+}
+/* параграфы внутри аккордеона */
+.accordion p { margin: 0 0 10px }
+/* миниатюры изображений */
+.accordion img{ width: 25%; height: auto}

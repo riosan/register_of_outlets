@@ -1,0 +1,40 @@
+
+{{-- <link rel="stylesheet" href="css/menu.css">--}}
+
+{{--<div class="QrCode">
+    <img src="http://chart.apis.google.com/chart?cht=qr&chs=100x100&chl={{'http://'.$_SERVER['SERVER_ADDR'].$_SERVER['REQUEST_URI']}}">
+</div>--}}
+
+
+{{--<div id="chart_div"></div>--}}
+
+{{--<div id="donutchart" style="width: 900px; height: 500px;"></div>--}}
+
+
+
+{{--   chart('<?php /*echo json_encode($ar_chart,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);*/?>');
+  chartDonut('<?php /*echo json_encode($ar_chart,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);*/?>');--}}
+
+{{--   <div align="center"><input class="btn btn-success" type="button" value="Get data"  onclick="getCheckBoxValue()" ></div>--}}
+
+
+
+{{--
+/* function getCheckBoxValue()
+{
+
+$.ajax({
+url: 'response',
+type: 'POST',
+headers: {
+'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+},
+data:{'names':JSON.stringify($('input:checkbox:checked').map(function(){return this.value;}).get())},
+success: function(data){
+$('.response_status').html(data);
+$('input:checkbox:enabled').prop("checked", false);
+},
+dataType: "html"
+});
+}
+*/--}}

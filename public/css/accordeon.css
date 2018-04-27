@@ -1,0 +1,142 @@
+
+
+/*<div class="accordion">
+    <ul>
+        <li>
+            <h3>Опции</h3>
+            <input class="sw" id="sw" type="checkbox">
+            <label for="sw">Отправлять на почту</label>
+        </li>
+
+    </ul>
+</div>*/
+
+
+
+
+
+.limiter{
+    position: relative;
+    width: 100%;
+
+}
+.cell{
+    position: relative;
+    width: 30%;
+    height:30%;
+
+}
+
+/* Формируем блок аккордеона */
+.accordion {
+    position: relative;
+    width: auto;
+    height:auto;
+    border: 1px solid #d3d3d3;
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+.viewLog{
+    position: relative;
+    width:  100%;
+    height: 100%;
+    font-size: 10px
+
+ }
+
+
+
+/*.QrCode>img{
+    position: fixed;
+    right: 5%;
+    top: 50px;
+    font-size: 10px
+
+}*/
+
+
+/* список аккордеона */
+.accordion>ul {
+    margin: 0;
+    padding: 0;
+    list-style:none;
+
+}
+.accordion>ul>li {
+    display:block;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    height:30px;
+    font-size: 90%;
+
+    /* задержка перехода при раскрытии */
+    transition: height 0.5s ease-in-out;
+    -moz-transition: height 0.5s ease-in-out;
+    -webkit-transition: height 0.5s ease-in-out;
+    -o-transition: height 0.5s ease-in-out;
+}
+
+.accordion>ul>li.active {
+    height: 125px;
+    font-size: 90%;
+
+}
+
+
+/* оформляем пункты */
+.accordion>ul>li>h3 {
+    display:block;
+    margin: 0 auto;
+    padding:7px 35%;
+    color: #068306;
+    text-decoration: none;
+    font-size:11pt;
+    text-shadow: 1px 1px #fff;
+    text-transform:uppercase;
+    text-align: center;
+    background: #c9c9c9;
+    border-top: 1px solid #f4f4f4;
+    border-bottom: 1px solid #d3d3d3;
+    /* градиент */
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr = '#f0f0f0', endColorstr = '#c9c9c9')";
+    background-image: -moz-linear-gradient(top, #f0f0f0, #c9c9c9);
+    background-image: -ms-linear-gradient(top, #f0f0f0, #c9c9c9);
+    background-image: -o-linear-gradient(top, #f0f0f0, #c9c9c9);
+    background-image: -webkit-gradient(linear, center top, center bottom, from(#f0f0f0), to(#c9c9c9));
+    background-image: -webkit-linear-gradient(top, #f0f0f0, #c9c9c9);
+    background-image: linear-gradient(top, #f0f0f0, #c9c9c9);
+    /* анимируем заголовок */
+    -o-transition: padding-left 250ms ease-out;
+    -webkit-transition: padding-left 250ms ease-out;
+    -moz-transition: padding-left 250ms ease-out;
+}
+
+/* пункты аккордеона при наведении */
+.accordion>ul>li.active>h3 {
+    /* оформляем пункты при наведении */
+    color: #068306;
+    background: #d3d3d3;
+    cursor:pointer;
+    /* градиент */
+    background-image: -moz-linear-gradient( top, #d3d3d3, #efefef);
+    background-image: -ms-linear-gradient( top, #d3d3d3, #efefef);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#d3d3d3), to(#efefef));
+    background-image: -o-linear-gradient(#dbdbdb, #e6e6e6); /* Opera */
+    filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr = '#d3d3d3', endColorstr='#efefef')"; /* IE 7 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr= '#d3d3d3', endColorstr= '#efefef')";   /* IE 8 */
+    /* подвижная ссылка */
+    /*padding-left: 30px;*/
+}
+/* параграфы внутри аккордеона */
+.accordion p { margin: 0 0 10px }
+/* миниатюры изображений */
+.accordion img{ width: 25%; height: auto}
+
+
+
+
+
+
+

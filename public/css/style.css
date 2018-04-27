@@ -1,0 +1,35 @@
+.text-block {
+    width: 250px;
+    margin: 50px;
+}
+
+#go-top {
+    position: fixed;
+    bottom: 5%;
+    right: 5%;
+    text-align: center;
+    cursor:pointer;
+    display:none;
+    width: 80px;
+    height: 30px;
+    background: #c0c0c0;
+    line-height: 30px;
+    border-radius: 5px;
+    opacity: 0.5
+}
+
+#go-top:hover {
+    background: #333;
+    color: #fff;
+}
+
+.container>table {
+    right: 10%;
+}
+
+.btn-group {
+    position: fixed;
+    top: 3%;
+    left: 1%;
+}
+
