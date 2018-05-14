@@ -364,7 +364,7 @@ class Functions extends ProviderVega
             default:
                 $name = $names[0];
         }
-            return $status[$name] ? $status[$name] : $this->config['undefined'];
+            return isset($status[$name]) ? $status[$name] : $this->config['undefined'];
     }
 
     public function getStatusInternetPoints()
