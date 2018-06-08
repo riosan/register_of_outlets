@@ -254,50 +254,44 @@ function hideMenu(sign) {
 
 function hideTable() {
 
-   var select = $('.Select').val();
+     var select = $('.Select').val();
    var all =  $('.container>table>tbody>tr').not(':first');
    var point = $('.container>table>tbody>tr.'+select);
    var pointn = $('.container>table>tbody>tr').not(':first').not( '.'+select);
    var inPoint = $('.container>table>tbody>tr[id=1]');
    var outPoint = $('.container>table>tbody>tr[id=0]');
    var autoExhange = $('.container>table>tbody>tr[name=old]');
-   var notInternet = $('.container>table>tbody>tr>td[name=offline]').parents('tr');
+  // var notInternet = $('.container>table>tbody>tr>td[name=offline]').parents('tr');
+    var notInternet = $('.container>table>tbody>tr>td[id=blink]').parents('tr');
 
 
 
-    if(select === 'Точки ⇒ Центральный'){
-        inPoint.hide();
-        outPoint.show();
+    switch (select) {
+        case 'Точки ⇒ Центральный':
+            inPoint.hide();
+            outPoint.show();
+            break;
+        case 'Центральный ⇒ Точки':
+            outPoint.hide();
+            inPoint.show();
+            break;
+        case 'Нет интернета':
+            all.hide();
+            notInternet.show();
+            break;
+        case 'Нет автообмена':
+            all.hide();
+            autoExhange.show();
+            break;
+        case 'allPoint':
+            all.show();
+            break;
+        default:
+            if(point.is(":hidden")) {
+                point.show();
+            } else {pointn.hide();}
+
     }
-    if(select === 'Центральный ⇒ Точки'){
-        outPoint.hide();
-        inPoint.show();
-    }
-
-
-    if((select !== 'Точки ⇒ Центральный') && (select !== 'Центральный ⇒ Точки') ) {
-        if(point.is(":hidden")) {
-            point.show();
-        } else {pointn.hide();}
-    }
-
-
-    if(select === 'Нет интернета'){
-        all.hide();
-        notInternet.show();
-    }
-
-    if(select === 'Нет автообмена'){
-       all.hide();
-       autoExhange.show();
-    }
-
-
-
-    if(select === 'allPoint'){
-        all.show();
-    }
-
 
 }
 
