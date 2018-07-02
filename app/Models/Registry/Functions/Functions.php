@@ -36,16 +36,15 @@ class Functions extends ProviderVega
      */
     public function replacePointName($sign = '', $string = '', $replace = [])
     {
-
         $result = '';
-
 
         if (empty($sign) && empty($string)) {
             return Functions::getPoint();
         }
 
-
         foreach (explode($sign, $string) as $str) {
+
+            if (empty($replace[$str])) return false;
 
             $result .= strtr($str, $replace) . ' ⇒ ';
         }
@@ -59,10 +58,10 @@ class Functions extends ProviderVega
     {
         $db = new ConnectDB();
 
-        $login = md5($data['user'] . $this->config['salt']);
+        $login = $data['user'];
         $pass = md5($data['pass'] . $this->config['salt']);
 
-        $result = $db->prepare("SELECT login,pass FROM authorization WHERE login =:login AND
+        $result = $db->prepare("SELECT login,pass FROM root WHERE login =:login AND
                                                                                     pass =:pass AND
                                                                                     enable =:enable",
             ['login' => $login, 'pass' => $pass, 'enable' => 1], 0);
@@ -71,7 +70,7 @@ class Functions extends ProviderVega
 
         /*$db->prepare("INSERT INTO authorization (login, pass, date) VALUES (:login, :pass, :date)
           ON DUPLICATE KEY UPDATE login =:login, pass =:pass",
-            ['login' => md5($data['user'].$this->config['salt']), 'pass' => md5($data['pass'].$this->config['salt']), 'date' => date('Y-m-d H:i:s')],1);*/
+            ['login' => $data['user']), 'pass' => md5($data['pass'].$this->config['salt']), 'date' => date('Y-m-d H:i:s')],1);*/
     }
 
 
@@ -79,29 +78,67 @@ class Functions extends ProviderVega
     {
         $db = new ConnectDB();
 
-        $result =  $db->prepare("INSERT INTO access_additional_function (ip,login,date,enable) VALUES (:ip, :login, :date, :enable) 
+        $result = $db->prepare("INSERT INTO {$data['table']} (ip,login,date,enable) VALUES (:ip, :login, :date, :enable)
           ON DUPLICATE KEY UPDATE ip =:ip, login =:login, date =:date",
-            ['ip' => $data['ip'], 'login' => $data['login'], 'date' => date('Y-m-d H:i:s'), 'enable' => $data['enable'] ? $data['enable'] : 0],  1);
+            ['ip' => $data['ip'], 'login' => $data['login'], 'date' => date('Y-m-d H:i:s'), 'enable' => $data['enable'] ? $data['enable'] : 0], 1);
 
         if (!empty($result)) {
             return true;
 
         }
-       return false;
+        return false;
 
     }
 
+    public function insertUserPoint($data)
+    {
+        $db = new ConnectDB();
+
+        $result = $db->prepare("INSERT INTO {$data['table']} (ip,short_name,login,date,enable) VALUES (:ip, :short_name, :login, :date, :enable) 
+          ON DUPLICATE KEY UPDATE ip =:ip, short_name =:short_name, login =:login, date =:date",
+            ['ip' => $data['ip'], 'short_name' => $data['short_name'], 'login' => $data['login'], 'date' => date('Y-m-d H:i:s'), 'enable' => $data['enable'] ? $data['enable'] : 0], 1);
+
+        if (!empty($result)) {
+            return true;
+
+        }
+        return false;
+
+    }
+
+
+    public function insertUserRoot($data)
+    {
+        $db = new ConnectDB();
+
+        $result = $db->prepare("INSERT INTO {$data['table']} (login,pass,date,enable) VALUES ( :login, :pass, :date, :enable) 
+          ON DUPLICATE KEY UPDATE  login =:login, pass =:pass, date =:date",
+            ['login' => $data['login'], 'pass' => @md5($data['pass'] . $this->config['salt']), 'date' => date('Y-m-d H:i:s'), 'enable' => $data['enable'] ? $data['enable'] : 0], 1);
+
+        if (!empty($result)) {
+            return true;
+
+        }
+        return false;
+
+    }
 
     public function changeUser($data)
     {
         $db = new ConnectDB();
 
-        if($data['field'] === 'enable'){
-            $data['value'] = $data['value'] ? 1 : 0;
+        switch ($data['field']) {
+            case 'enable':
+                $data['value'] = $data['value'] ? 1 : 0;
+                break;
+            case 'pass':
+                $data['value'] = md5($data['value'] . $this->config['salt']);
+                break;
         }
 
-        $result =  $db->prepare("UPDATE access_additional_function SET {$data['field']} = '{$data['value']}'  WHERE id =:id",
-            ['id' => $data['id']],  1);
+
+        $result = $db->prepare("UPDATE {$data['table']} SET {$data['field']} = '{$data['value']}', date = NOW()  WHERE id =:id",
+            ['id' => $data['id']], 1);
 
         if (!empty($result)) {
             return true;
@@ -115,8 +152,8 @@ class Functions extends ProviderVega
     {
         $db = new ConnectDB();
 
-        $result =  $db->prepare("DELETE FROM access_additional_function WHERE id IN (".implode(',',$data).")",
-            null,  1);
+        $result = $db->prepare("DELETE FROM {$data['table']} WHERE id IN (" . implode(',', $data['checked']) . ")",
+            null, 1);
 
         if (!empty($result)) {
             return true;
@@ -124,8 +161,6 @@ class Functions extends ProviderVega
         }
         return false;
     }
-
-
 
 
     /**
@@ -144,14 +179,12 @@ class Functions extends ProviderVega
     public function getPoint()
     {
         $db = new ConnectDB();
-        $query = "SELECT short_name, name FROM point";
+        $query = "SELECT short_name, login FROM point WHERE enable =:enable ";
 
-        /*$this->log->addInfo($query);*/
-
-        $replace = $db->prepare($query, null, 0);
+        $replace = $db->prepare($query, ['enable' => 1], 0);
         $result = [];
         foreach ($replace as $key => $value) {
-            $result[$value['short_name']] = $value['name'];
+            $result[$value['short_name']] = $value['login'];
         }
         return $result;
     }
@@ -169,7 +202,7 @@ class Functions extends ProviderVega
         }
 
         $db = new ConnectDB();
-        $result = $db->prepare("SELECT ip FROM access_additional_function WHERE ip =:ip and enable =:enable",
+        $result = $db->prepare("SELECT ip FROM users WHERE ip =:ip and enable =:enable",
             ['ip' => $ip, 'enable' => 1], 0);
 
         if (!empty($result[0]['ip'])) {
@@ -204,9 +237,9 @@ class Functions extends ProviderVega
 
         $db = new ConnectDB();
 
-        $db->prepare("INSERT INTO mail (ip,address,date) VALUES (:ip, :address, :date) 
-          ON DUPLICATE KEY UPDATE address =:address, date =:date",
-            ['ip' => $_SERVER['REMOTE_ADDR'], 'address' => $email[1], 'date' => date('Y-m-d H:i:s')], 1);
+        $db->prepare("INSERT INTO mail (ip,login,date) VALUES (:ip, :login, :date) 
+          ON DUPLICATE KEY UPDATE login =:login, date =:date",
+            ['ip' => $_SERVER['REMOTE_ADDR'], 'login' => $email[1], 'date' => date('Y-m-d H:i:s')], 1);
 
         $this->requestConfirmationMail($email[1]);
     }
@@ -240,18 +273,9 @@ class Functions extends ProviderVega
     public function getConfirmMailAddress()
     {
         $db = new ConnectDB();
-        return $db->prepare("SELECT address FROM mail WHERE enable =:enable", ['enable' => 1], 0);
+        return $db->prepare("SELECT login FROM mail WHERE enable =:enable", ['enable' => 1], 0);
     }
 
-    /**
-     * @return array|bool
-     */
-    public function getMailAddress()
-    {
-        $db = new ConnectDB();
-        return $db->prepare("SELECT address FROM mail WHERE enable =:enable and ip =:ip",
-            ['ip' => $_SERVER['REMOTE_ADDR'], 'enable' => 1], 0);
-    }
 
     /**
      * @param $response
@@ -261,11 +285,11 @@ class Functions extends ProviderVega
     {
         if ($response['hash'] === $this->createHash($response['mail'])) {
             $db = new ConnectDB();
-            return $db->prepare("INSERT INTO mail (ip, address, enable, date) VALUES (:ip, :address, :enable, :date) 
-          ON DUPLICATE KEY UPDATE address =:address, enable =:enable, date =:date",
+            return $db->prepare("INSERT INTO mail (ip, login, enable, date) VALUES (:ip, :login, :enable, :date) 
+          ON DUPLICATE KEY UPDATE login =:login, enable =:enable, date =:date",
                 [
                     'ip' => $_SERVER['REMOTE_ADDR'],
-                    'address' => $response['mail'],
+                    'login' => $response['mail'],
                     'enable' => 1,
                     'date' => date('Y-m-d H:i:s')
                 ], 1);
@@ -312,7 +336,7 @@ class Functions extends ProviderVega
 
         if ($response['hash'] === $this->createHash($response['mail'])) {
             $db = new ConnectDB();
-            return $db->prepare("DELETE FROM mail WHERE address =:address", ['address' => $response['mail']], 1);
+            return $db->prepare("DELETE FROM mail WHERE login =:login", ['login' => $response['mail']], 1);
 
 
         }
@@ -347,15 +371,36 @@ class Functions extends ProviderVega
     public function getUsersList()
     {
         $db = new ConnectDB();
-        $result = $db->prepare("SELECT id, ip, login, date, enable FROM access_additional_function ", null, 0);
+        $result = $db->prepare("SELECT id, ip, login, date, enable FROM users ", null, 0);
+        return $result;
+    }
+
+    public function getUsersListMail()
+    {
+        $db = new ConnectDB();
+        $result = $db->prepare("SELECT id, ip, login, date, enable FROM mail ", null, 0);
+        return $result;
+    }
+
+    public function getUsersListPoint()
+    {
+        $db = new ConnectDB();
+        $result = $db->prepare("SELECT id, ip, ip_local, short_name, login, date, enable FROM point ", null, 0);
+        return $result;
+    }
+
+    public function getUsersListRoot()
+    {
+        $db = new ConnectDB();
+        $result = $db->prepare("SELECT id, login, pass, date, enable FROM `root` ", null, 0);
         return $result;
     }
 
 
-    public function getStatusPoints($file,$head,$status)
+    public function getStatusPoints($file, $head, $status)
     {
-        $short_name = mb_substr($file,7,5);
-        $names = explode('_',$short_name);
+        $short_name = mb_substr($file, 7, 5);
+        $names = explode('_', $short_name);
 
         switch ($names[0]) {
             case $head:
@@ -364,25 +409,39 @@ class Functions extends ProviderVega
             default:
                 $name = $names[0];
         }
-            return isset($status[$name]) ? $status[$name] : $this->config['undefined'];
+        return isset($status[$name]) ? $status[$name] : $this->config['undefined'];
     }
 
     public function getStatusInternetPoints()
     {
         $db = new ConnectDB();
 
-        $result = $db->prepare("SELECT short_name,ip FROM point WHERE head =:head", ['head' => 0], 0);
+        $result = $db->prepare("SELECT short_name,ip, ip_local FROM point WHERE head =:head", ['head' => 0], 0);
         $status_points = [];
-        foreach ($result as $value => $data ) {
-            exec ("ping -c1 -w1 {$data['ip']}",$cmd,$status);
-            if($status === 0) {
+        foreach ($result as $value => $data) {
+            $this->getPing($data['ip_local'], $cmd, $status);
+            if ($status === 0) {
                 $status_points[$data['short_name']] = $this->config['online'];
             } else {
                 $status_points[$data['short_name']] = $this->config['offline'];
+                /*$this->getPing($data['ip_local'], $cmd, $status);
+                if ($status === 0) {
+                    $status_points[$data['short_name']] = $this->config['online'];
+                } else {
+                    $status_points[$data['short_name']] = $this->config['offline'];
+                }*/
+
             }
+
         }
 
         return $status_points;
+    }
+
+
+    private function getPing($data, &$cmd, &$status)
+    {
+        exec("ping -c1 -w1 {$data}", $cmd, $status);
     }
 
     public function getHeadPoint()
@@ -396,8 +455,8 @@ class Functions extends ProviderVega
     public function getMessageStatus()
     {
         return ['online' => $this->config['online'],
-                'offline' => $this->config['offline'],
-                'undefined' => $this->config['undefined']
-                ];
+            'offline' => $this->config['offline'],
+            'undefined' => $this->config['undefined']
+        ];
     }
 }
