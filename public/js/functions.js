@@ -216,7 +216,7 @@ function delMail(select,text)
     function CicleTimeOut() {
         $(document).ready(function(){
             getLogTransport();
-           interval = setInterval('getLogTransport()', 5000);
+            interval = setInterval('getLogTransport()', 5000);
         });
 
     }
@@ -254,7 +254,7 @@ function hideMenu(sign) {
 
 function hideTable() {
 
-     var select = $('.Select').val();
+   var select = $('.Select').val();
    var all =  $('.container>table>tbody>tr').not(':first');
    var point = $('.container>table>tbody>tr.'+select);
    var pointn = $('.container>table>tbody>tr').not(':first').not( '.'+select);
@@ -292,10 +292,19 @@ function hideTable() {
             } else {pointn.hide();}
 
     }
-
 }
 
 
+function flashing()
+{
+    $(document).ready(function(){
 
+        interval = setInterval('flicker()', 5000);
+    });
+}
+
+function flicker() {
+    $(".blink").fadeTo(1000, 0.1).fadeTo(2000, 1.0);
+}
 
 
