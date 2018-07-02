@@ -55,11 +55,19 @@ class RegistryController extends Controller
     public function getRegistry(Request $request)
     {
 
+        /* if((new Functions())->sessionAuthorized() === false){
+             header("Location: admin");
+             exit;
+         } else {
+             header("Location: statistics/registry");
+         }*/
+
+
         if (isset($request['hash']) && isset($request['mail'])) {
             $result = (new Functions())->setRequestMailAddress($request);
 
             if ($result) {
-                return redirect("http://{$_SERVER['SERVER_ADDR']}/statistics/confirm?mail=" . $request['mail']);
+                return redirect("statistics/confirm?mail=" . $request['mail']);
             }
         }
 
@@ -70,13 +78,13 @@ class RegistryController extends Controller
         if ($request['send'] === $func->getMailHash()) {
             $model->getFileList(true);
         } else {
+
             return view('page.registry')
                 ->with([
                     'files_list' => $model->getFileList(false),
                     'mac' => $func->definitionIp(),
                     'hours_limit' => $func->getHoursLimit(),
-                    'points_list' => $func->replacePointName(),
-                    // 'email' => $func->getMailAddress()
+                    'points_list' => $func->replacePointName()
                 ]);
         }
 
@@ -97,10 +105,10 @@ class RegistryController extends Controller
             $result = (new Functions())->delMailAddress($request);
 
             if ($result) {
-                return redirect("http://{$_SERVER['SERVER_ADDR']}/statistics/cancel?mail=" . $request['mail']);
+                return redirect("statistics/cancel?mail=" . $request['mail']);
             }
 
-            return redirect("http://{$_SERVER['SERVER_ADDR']}/statistics/notexists?mail=" . $request['mail']);
+            return redirect("statistics/notexists?mail=" . $request['mail']);
         }
 
     }
@@ -116,4 +124,18 @@ class RegistryController extends Controller
     }
 
 
+    public function getRegistry2(Request $request)
+    {
+        return view('page.registry2');
+    }
+
+    public function getRegistry3(Request $request)
+    {
+        return view('page.registry3');
+    }
+
+    public function getRegistry4(Request $request)
+    {
+        return view('page.registry4');
+    }
 }
