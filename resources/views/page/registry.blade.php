@@ -13,6 +13,10 @@
     <div id = "text-block" > </div >
     <body>
 
+    <div class="admin">
+        <a href="http://{{$_SERVER['SERVER_ADDR']}}/admin" target="_blank" >Admin Panel</a>
+    </div>
+
     <div class="accordion">
     <ul>
         <li>
@@ -54,6 +58,7 @@
         <option value="Точки ⇒ Центральный">Точки ⇒ Центральный</option>
         <option value="Нет автообмена">Нет автообмена < {{$hours_limit}} часов</option>
         <option value="Нет интернета">Нет интернета</option>
+        {{asort($points_list)}}
         @foreach($points_list as $value)
             <option value="{{$value}}">{{$value}}</option>
         @endforeach
@@ -73,7 +78,7 @@
 
                     <td align="left">{{$value['file']}}
                         <?php if ($value['diff'] >= $hours_limit): ?>
-                    <td bgcolor="#8a9ba8">
+                    <td class="blink" bgcolor="#c5d8e5">
                         <?php else: ?>
                     <td>
                     <?php endif; ?>
@@ -83,11 +88,13 @@
                     <td> {{$value['fsize']}}</td>
 
                     <?php if (($value['status_point'] === $value['status']['offline']) || ($value['status_point'] === $value['status']['undefined']) ): ?>
-                    <td bgcolor="#8a9ba8" name="{{$value['status']['offline']}}">
+                    <td  align="center" class="blink" {{--bgcolor="#c5d8e5"--}} id="blink" {{--name="{{$value['status']['offline']}}"--}}>  <img src="../image/Stop.png">
                     <?php else: ?>
-                    <td>
+                    <td align="center"> <img src="../image/Select.png">
                     <?php endif; ?>
-                    {{$value['status_point']}}</td>
+                    {{--{{$value['status_point']}}--}}
+
+                    </td>
 
                  </tr>
 
@@ -111,6 +118,7 @@
     buttonUp();
     hideMenu('{{$mac}}');
     loadMail('{{isset($email[0]['address']) ? $email[0]['address'] : '' }}');
+   /* flashing();*/
 
 </script>
 

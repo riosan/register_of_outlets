@@ -2,7 +2,7 @@
 
 <!doctype html>
 <script>
-    setTimeout('window.location = "http://{{$_SERVER['SERVER_ADDR']}}/statistics/registry"', 5000);
+    setTimeout('window.location = "/statistics/registry"', 5000);
 </script>
 <html lang="en">
 

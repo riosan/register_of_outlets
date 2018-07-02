@@ -8,7 +8,7 @@
     <meta name="MobileOptimized" content="width">
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/style.css">
-      <title>Пользователи</title>
+      <title>Почта</title>
 </head>
 
 <body>
@@ -18,6 +18,7 @@
 @include('admin.templates.menu')
 
 @include('admin.templates.form')
+
 
 <script type="text/javascript" src="../js/jquery.min.js"></script>
 <script type="text/javascript" src="../js/bootstrap.min.js"></script>
