@@ -32,4 +32,37 @@
     top: 3%;
     left: 1%;
 }
+.mail {
+    position: fixed;
+    top: 4%;
+    left: 10%;
+}
 
+.users {
+    position: fixed;
+    top: 6%;
+    left: 10%;
+}
+
+.point {
+    position: fixed;
+    top: 8%;
+    left: 10%;
+}
+
+.root {
+    position: fixed;
+    top: 10%;
+    left: 10%;
+}
+
+.admin {
+    position: fixed;
+    top: 15%;
+    right: 10%;
+}
+.logout {
+    position: fixed;
+    top: 15%;
+    left: 10%;
+}
