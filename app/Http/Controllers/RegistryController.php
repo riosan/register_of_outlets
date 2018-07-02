@@ -122,20 +122,4 @@ class RegistryController extends Controller
     {
         return view('page.cancel');
     }
-
-
-    public function getRegistry2(Request $request)
-    {
-        return view('page.registry2');
-    }
-
-    public function getRegistry3(Request $request)
-    {
-        return view('page.registry3');
-    }
-
-    public function getRegistry4(Request $request)
-    {
-        return view('page.registry4');
-    }
 }
